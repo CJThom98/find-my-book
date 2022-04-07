@@ -99,6 +99,7 @@ const SignupForm = () => {
           Submit
         </Button>
       </Form>
+      {error && <div>Sign Up failed</div>}
     </>
   );
 };
