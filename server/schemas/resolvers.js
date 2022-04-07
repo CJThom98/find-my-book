@@ -8,7 +8,7 @@ const resolvers = {
             if (context.user) {
                 const userData = await User.findOne({ _id: context.user._id })
                     .select('-__v -password')
-                    .populate('savedBooks');
+                    .populate('books');
 
                 return userData;
             }
@@ -24,10 +24,16 @@ const resolvers = {
 
             return { token, user };
         },
-        login: async (panret, { email, password }) => {
+        login: async (parent, { email, password }) => {
             const user = await User.findOne({ email });
 
             if (!user) {
+                throw new AuthenticationError('Incorrect credentials!');
+            }
+
+            const correctPW = await user.isCorrectPassword(password);
+
+            if (!correctPW) {
                 throw new AuthenticationError('Incorrect credentials!');
             }
 
@@ -35,12 +41,39 @@ const resolvers = {
             return { token, user };
         },
         saveBook: async (parent, args, context) => {
-
+            if (context.user) {
+                const updatedUser = await User.findOneAndUpdate(
+                    {_id: context.user._id},
+                    {
+                        $push: {
+                            savedBooks: args.input
+                        }
+                    },
+                    { new: true }
+                );
+                console.log("updateUser:", updatedUser);
+                return updatedUser;
+            }
         },
-        removeBook: async (parent, args, context) => {
+        removeBook: async (parent, { bookId }, context) => {
+            if (context.user) {
+                const updatedUser = await User.findOneAndUpdate(
+                    { _id: context.user._id },
+                    {
+                        $pull: {
+                            savedBooks: {
+                                bookId: bookId
+                            }
+                        }
+                    },
+                    { new: true }
+                );
 
-        }
-    }
+                return updatedUser;
+            }
+            throw new AuthenticationError("You need to be logged in!");
+        },
+    },
 };
 
 module.exports = resolvers;
