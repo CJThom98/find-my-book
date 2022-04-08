@@ -80,7 +80,7 @@ const SearchBooks = () => {
 
       console.log(data);
 
-      // setSavedBookIds([...savedBookIds]);
+      setSavedBookIds([...savedBookIds, bookToSave.bookId]);
     } catch (err) {
       console.error(err);
     }
