@@ -9,7 +9,6 @@ import { REMOVE_BOOK } from '../utils/mutations';
 
 const SavedBooks = () => {
   const { loading, data } = useQuery(QUERY_ME);
-  console.log("data-line13/savedbooks.js:", data);
   const [removeBook, { error }] = useMutation(REMOVE_BOOK);
   const userData = data?.me || {};
   console.log(userData);
@@ -23,11 +22,11 @@ const SavedBooks = () => {
     }
 
     try {
-      const { bookdata } = await removeBook({
+      const { bookData } = await removeBook({
         variables: { bookId },
       });
 
-      console.log("book data:", bookdata);
+      console.log("book data:", bookData);
 
       if (error) {
         throw new Error('something went wrong!');
@@ -58,7 +57,7 @@ const SavedBooks = () => {
       <Container>
         <h2>
           {userData.savedBooks.length
-            ? `Viewing ${userData.savedBooks.length} saved ${userData.savedBooks.length === 1 ? 'book' : 'books'}:`
+            ? `Viewing ${userData.savedBooks.length} saved ${userData.savedBooks.length === 1 ? 'book' : 'books'}`
             : 'You have no saved books!'}
         </h2>
         <CardColumns>
