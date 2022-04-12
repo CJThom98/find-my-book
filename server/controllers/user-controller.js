@@ -1,4 +1,4 @@
-//import user model
+// import user model
 const { User } = require('../models');
 // import sign token function from auth
 const { signToken } = require('../utils/auth');
@@ -16,8 +16,6 @@ module.exports = {
 
     res.json(foundUser);
   },
-
-
   // create a user, sign a token, and send it back (to client/src/components/SignUpForm.js)
   async createUser({ body }, res) {
     const user = await User.create(body);
@@ -28,8 +26,6 @@ module.exports = {
     const token = signToken(user);
     res.json({ token, user });
   },
-
-
   // login a user, sign a token, and send it back (to client/src/components/LoginForm.js)
   // {body} is destructured req.body
   async login({ body }, res) {
@@ -62,7 +58,7 @@ module.exports = {
       return res.status(400).json(err);
     }
   },
-  //remove a book from `savedBooks`
+  // remove a book from `savedBooks`
   async deleteBook({ user, params }, res) {
     const updatedUser = await User.findOneAndUpdate(
       { _id: user._id },
